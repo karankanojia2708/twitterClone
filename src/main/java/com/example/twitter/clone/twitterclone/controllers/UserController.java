@@ -1,6 +1,7 @@
 package com.example.twitter.clone.twitterclone.controllers;
 
 import com.example.twitter.clone.twitterclone.dto.FollowerDto;
+import com.example.twitter.clone.twitterclone.model.Post;
 import com.example.twitter.clone.twitterclone.model.User;
 import com.example.twitter.clone.twitterclone.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,5 +41,10 @@ public class UserController {
     @GetMapping("/get/following/list")
     public List<User> getFollowingList(@RequestParam("username") String username){
         return service.getFollowingList(username);
+    }
+
+    @GetMapping("/get/post/list")
+    public List<Post> getPostList(@RequestParam("username") String username){
+        return service.getPostList(username);
     }
 }

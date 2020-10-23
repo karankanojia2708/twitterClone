@@ -2,6 +2,7 @@ package com.example.twitter.clone.twitterclone.services;
 
 
 import com.example.twitter.clone.twitterclone.dto.FollowerDto;
+import com.example.twitter.clone.twitterclone.model.Post;
 import com.example.twitter.clone.twitterclone.model.User;
 import com.example.twitter.clone.twitterclone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ public class UserService {
                         return "Already following";
                     }else{
                         user1.get().getFollowing().add(user.get());
-                        user.get().getFollowers().add(user.get());
+                        user.get().getFollowers().add(user1.get());
                         this.repository.save(user.get());
                         this.repository.save(user1.get());
                         return user1.get().getUsername()+" is following "+ user.get().getUsername();
@@ -82,6 +83,15 @@ public class UserService {
         Optional<User> user =  this.repository.findUserByUsername(username);
         if(user.isPresent()) {
             return user.get().getFollowers();
+        }else{
+            return null;
+        }
+    }
+
+    public List<Post> getPostList(String username){
+        Optional<User> user =  this.repository.findUserByUsername(username);
+        if(user.isPresent()) {
+            return user.get().getPosts();
         }else{
             return null;
         }

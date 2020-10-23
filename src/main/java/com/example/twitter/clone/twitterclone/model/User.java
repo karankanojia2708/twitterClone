@@ -33,6 +33,7 @@ public class User {
 
     @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.PERSIST)
     @JoinColumn(name="post_id")
+    @JsonIgnore
     private List<Post> posts;
 
 }
