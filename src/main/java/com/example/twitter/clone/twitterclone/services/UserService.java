@@ -105,7 +105,7 @@ public class UserService {
         Optional<User> user = this.repository.findUserByUsername(username);
         if(user.isPresent()){
             if(user.get().getPassword().equals(password)){
-                return "AccessToken::"+dto.username.hashCode()+":"+dto.password.hashCode();
+                return "A random hashcode which can be later used to authenticate by inserting it in all requests";
             }else{
                 return "Invalid password";
             }
