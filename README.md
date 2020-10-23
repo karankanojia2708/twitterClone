@@ -35,3 +35,9 @@ curl --location --request POST 'http://localhost:8080/api/v1/post/add/post?usern
     "content" : "this is normal post content"
 }'
 
+
+
+
+How to get started : 
+Create a database twitter_clone 
+add approriate database location url in properties file 
