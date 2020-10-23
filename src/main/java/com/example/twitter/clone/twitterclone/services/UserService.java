@@ -1,14 +1,13 @@
 package com.example.twitter.clone.twitterclone.services;
 
 
+import com.example.twitter.clone.twitterclone.dto.FollowerDto;
 import com.example.twitter.clone.twitterclone.model.User;
 import com.example.twitter.clone.twitterclone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -25,17 +24,67 @@ public class UserService {
         }
     }
 
-    public boolean createUser(String username){
+    public String createUser(String username){
         try{
-            User user = new User();
-            user.setUsername(username);
-            user.setFollowers(new HashSet<>());
-            user.setFollowing(new HashSet<>());
-            user.setPosts(new HashSet<>());
-            repository.save(user);
-            return true;
+            Optional<User> p = this.repository.findUserByUsername(username);
+            if(p.isPresent()){
+                return "User already present";
+            }else{
+                User user = new User();
+                user.setUsername(username);
+                user.setFollowing(new ArrayList<>());
+                user.setPosts(new ArrayList<>());
+                repository.save(user);
+                return "User created";
+            }
+
         }catch(Exception e){
-            return false;
+            return e.toString();
         }
     }
+
+    public String addFollower(String username, FollowerDto dto){
+        try {
+            Optional<User> user = repository.findUserByUsername(dto.username);
+            if(user.isPresent()){
+                Optional<User> user1 = repository.findUserByUsername(username);
+                if(user1.isPresent()){
+                    if (user1.get().getFollowing().contains(user.get())){
+                        return "Already following";
+                    }else{
+                        user1.get().getFollowing().add(user.get());
+                        user.get().getFollowers().add(user.get());
+                        this.repository.save(user.get());
+                        this.repository.save(user1.get());
+                        return user1.get().getUsername()+" is following "+ user.get().getUsername();
+                    }
+                }else{
+                    return "User not found";
+                }
+            }else{
+                return "User not found";
+            }
+        }catch (Exception e){
+            return e.toString();
+        }
+    }
+
+    public List<User> getFollowingList(String username){
+        Optional<User> user =  this.repository.findUserByUsername(username);
+        if(user.isPresent()) {
+            return user.get().getFollowing();
+        }else{
+            return null;
+        }
+    }
+
+    public List<User> getFollowerList(String username){
+        Optional<User> user =  this.repository.findUserByUsername(username);
+        if(user.isPresent()) {
+            return user.get().getFollowers();
+        }else{
+            return null;
+        }
+    }
+
 }
