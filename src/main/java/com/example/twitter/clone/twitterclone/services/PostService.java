@@ -20,13 +20,17 @@ public class PostService {
     public String addPost(String username, PostDto dto){
         Optional<User> user = userRepository.findUserByUsername(username);
         if(user.isPresent()){
-            Post post = new Post();
-            post.setContent(dto.content);
-            post.setUser(user.get());
-            user.get().getPosts().add(post);
-            postRepository.save(post);
-            userRepository.save(user.get());
-            return "Post added successfully";
+            if(dto.content.split(" ").length > 140){
+                return "Content to large";
+            }else{
+                Post post = new Post();
+                post.setContent(dto.content);
+                post.setUser(user.get());
+                user.get().getPosts().add(post);
+                postRepository.save(post);
+                userRepository.save(user.get());
+                return "Post added successfully";
+            }
         }else{
             return "Invalid username";
         }
