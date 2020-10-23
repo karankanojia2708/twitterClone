@@ -1,6 +1,7 @@
 package com.example.twitter.clone.twitterclone.controllers;
 
 import com.example.twitter.clone.twitterclone.dto.FollowerDto;
+import com.example.twitter.clone.twitterclone.dto.TokenDto;
 import com.example.twitter.clone.twitterclone.model.Post;
 import com.example.twitter.clone.twitterclone.model.User;
 import com.example.twitter.clone.twitterclone.services.UserService;
@@ -26,8 +27,8 @@ public class UserController {
         return service.getUserViaUsername(username);
     }
     @PostMapping("/username")
-    public String createUser(@RequestParam("username") String username){
-        return service.createUser(username);
+    public String createUser(@RequestParam("username") String username, @RequestParam("password") String password){
+        return service.createUser(username, password);
     }
     @PostMapping("/add/follower")
     public String addFollower(@RequestParam("username") String username, @RequestBody FollowerDto dto){
@@ -47,4 +48,10 @@ public class UserController {
     public List<Post> getPostList(@RequestParam("username") String username){
         return service.getPostList(username);
     }
+
+    @PostMapping("/login/hash/code")
+    public String getAccessToken(@RequestBody TokenDto dto){
+        return service.getAccessToken(dto);
+    }
+
 }

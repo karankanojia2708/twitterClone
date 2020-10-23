@@ -2,6 +2,7 @@ package com.example.twitter.clone.twitterclone.services;
 
 
 import com.example.twitter.clone.twitterclone.dto.FollowerDto;
+import com.example.twitter.clone.twitterclone.dto.TokenDto;
 import com.example.twitter.clone.twitterclone.model.Post;
 import com.example.twitter.clone.twitterclone.model.User;
 import com.example.twitter.clone.twitterclone.repository.UserRepository;
@@ -25,7 +26,7 @@ public class UserService {
         }
     }
 
-    public String createUser(String username){
+    public String createUser(String username, String password){
         try{
             Optional<User> p = this.repository.findUserByUsername(username);
             if(p.isPresent()){
@@ -33,6 +34,7 @@ public class UserService {
             }else{
                 User user = new User();
                 user.setUsername(username);
+                user.setPassword(password);
                 user.setFollowing(new ArrayList<>());
                 user.setPosts(new ArrayList<>());
                 repository.save(user);
@@ -94,6 +96,21 @@ public class UserService {
             return user.get().getPosts();
         }else{
             return null;
+        }
+    }
+
+    public String getAccessToken(TokenDto dto){
+        String username = dto.username;
+        String password = dto.password;
+        Optional<User> user = this.repository.findUserByUsername(username);
+        if(user.isPresent()){
+            if(user.get().getPassword().equals(password)){
+                return "AccessToken::"+dto.username.hashCode()+":"+dto.password.hashCode();
+            }else{
+                return "Invalid password";
+            }
+        }else{
+            return "Invalid username";
         }
     }
 

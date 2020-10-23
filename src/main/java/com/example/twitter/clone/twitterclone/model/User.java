@@ -23,6 +23,9 @@ public class User {
     @Column(name = "username")
     private String username;
 
+    @Column(name = "pasword")
+    private String password;
+
    @JsonIgnore
     @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.PERSIST)
     private List<User> followers;
